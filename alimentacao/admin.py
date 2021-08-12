@@ -2,12 +2,18 @@ from django.contrib import admin
 from django.views.decorators.cache import never_cache
 
 from alimentacao.models import Alimento, Medida, Refeicao, Porcao, TipoRefeicao
+from perfil.models import Perfil
 
 
 class CustomAdminSite(admin.AdminSite):
     @never_cache
     def index(self, request, extra_context=None):
-        extra_context = Refeicao.objects.get_whole_day_info()
+        whole_day_info = Refeicao.objects.get_whole_day_info()
+        tmb = Perfil.objects.get_taxa_metabolismo_basal()
+        extra_context = {
+            **whole_day_info,
+            'tmb': tmb
+        }
         template_response = super().index(request, extra_context=extra_context)
         return template_response
 
@@ -30,3 +36,4 @@ custom_admin_site.register(Alimento)
 custom_admin_site.register(Medida)
 custom_admin_site.register(TipoRefeicao)
 custom_admin_site.register(Refeicao, RefeicaoAdmin)
+custom_admin_site.register(Perfil)

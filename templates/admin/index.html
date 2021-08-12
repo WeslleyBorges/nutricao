@@ -6,21 +6,28 @@
 
 {% block sidebar %}
     <div id="content-related">
+        <h1>Informação nutricional do dia</h1>
+        <div>
+            <p>Minha MTB: {{ tmb }} kcal</p>
+            <p>Total de calorias consumidas: {{ kcal }} kcal</p>
+        </div>
         <canvas id="chart" width="300" height="300"></canvas>
     </div>
 
     <script>
     const ctx = document.getElementById("chart")
-    const names = ['Carboidratos', 'Proteínas', 'Gorduras']
-    const prices = [{{ carboidratos }}, {{ proteinas }}, {{ gorduras }}]
+    const labels = ['Carboidratos', 'Proteínas', 'Gorduras']
+    const data = [{{ carboidratos }}, {{ proteinas }}, {{ gorduras }}]
+
+
 
     const productsChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: names,
+            labels,
             datasets: [{
                 label: 'info',
-                data: prices,
+                data,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -41,6 +48,16 @@
             }]
         },
         options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Chart.js Bar Chart'
+              }
+            },
             scales: {
                 yAxes: [{
                     ticks: {
