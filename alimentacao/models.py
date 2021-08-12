@@ -1,7 +1,9 @@
 from django.db import models
 
-
+from alimentacao.managers import RefeicaoManager
 # Create your models here.
+
+
 class Medida(models.Model):
     descricao = models.CharField(max_length=30)
     abreviacao = models.CharField(max_length=5)
@@ -37,6 +39,8 @@ class Refeicao(models.Model):
     tipo_refeicao = models.ForeignKey(TipoRefeicao, on_delete=models.DO_NOTHING)
     dia = models.DateField(auto_now_add=True)
 
+    objects = RefeicaoManager()
+
     class Meta:
         verbose_name_plural = 'refeições'
 
@@ -47,10 +51,10 @@ class Refeicao(models.Model):
 class Porcao(models.Model):
     alimento = models.ForeignKey(Alimento, on_delete=models.DO_NOTHING)
     quantidade = models.IntegerField()
-    refeicao_alimento = models.ForeignKey(Refeicao, on_delete=models.DO_NOTHING)
+    refeicao_alimento = models.ForeignKey(Refeicao, on_delete=models.DO_NOTHING, related_name='porcoes')
 
     class Meta:
         verbose_name_plural = 'porções'
 
     def __str__(self):
-        return self.alimento.descricao
+        return f'{self.alimento.descricao} - {self.alimento.quantidade} {self.alimento.medida.abreviacao}'

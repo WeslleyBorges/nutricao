@@ -1,7 +1,15 @@
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin
+from django.views.decorators.cache import never_cache
 
 from alimentacao.models import Alimento, Medida, Refeicao, Porcao, TipoRefeicao
+
+
+class CustomAdminSite(admin.AdminSite):
+    @never_cache
+    def index(self, request, extra_context=None):
+        extra_context = Refeicao.objects.get_whole_day_info()
+        template_response = super().index(request, extra_context=extra_context)
+        return template_response
 
 
 class PorcaoInline(admin.TabularInline):
@@ -10,14 +18,15 @@ class PorcaoInline(admin.TabularInline):
     max_num = 15
 
 
-class RefeicaoAdmin(ModelAdmin):
+class RefeicaoAdmin(admin.ModelAdmin):
     inlines = [
         PorcaoInline
     ]
 
 
-admin.site.register(Alimento)
-admin.site.register(Medida)
-admin.site.register(TipoRefeicao)
-admin.site.register(Porcao)
-admin.site.register(Refeicao, RefeicaoAdmin)
+custom_admin_site = CustomAdminSite()
+
+custom_admin_site.register(Alimento)
+custom_admin_site.register(Medida)
+custom_admin_site.register(TipoRefeicao)
+custom_admin_site.register(Refeicao, RefeicaoAdmin)
