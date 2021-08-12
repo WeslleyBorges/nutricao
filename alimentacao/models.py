@@ -23,9 +23,9 @@ class TipoRefeicao(models.Model):
 class Alimento(models.Model):
     descricao = models.CharField(max_length=50)
     kcal = models.IntegerField()
-    carboidratos = models.IntegerField()
-    proteinas = models.IntegerField()
-    gorduras = models.IntegerField()
+    carboidratos = models.DecimalField(max_digits=4, decimal_places=1)
+    proteinas = models.DecimalField(max_digits=4, decimal_places=1)
+    gorduras = models.DecimalField(max_digits=4, decimal_places=1)
     quantidade = models.IntegerField()
     medida = models.ForeignKey(Medida, on_delete=models.DO_NOTHING)
 
