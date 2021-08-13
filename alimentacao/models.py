@@ -34,6 +34,9 @@ class Alimento(models.Model):
     def __str__(self):
         return self.descricao
 
+    class Meta:
+        ordering = ['descricao']
+
 
 class Refeicao(models.Model):
     tipo_refeicao = models.ForeignKey(TipoRefeicao, on_delete=models.DO_NOTHING)
