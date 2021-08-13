@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.views.decorators.cache import never_cache
+from datetime import date
 
 from alimentacao.models import Alimento, Medida, Refeicao, Porcao, TipoRefeicao
 from perfil.models import Perfil
@@ -28,6 +29,11 @@ class RefeicaoAdmin(admin.ModelAdmin):
     inlines = [
         PorcaoInline
     ]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        today = date.today()
+        return qs.filter(dia=today)
 
 
 custom_admin_site = CustomAdminSite()
