@@ -36,9 +36,13 @@ class RefeicaoAdmin(admin.ModelAdmin):
         return qs.filter(dia=today)
 
 
+class AlimentoAdmin(admin.ModelAdmin):
+    list_display = ('descricao', 'kcal', 'carboidratos', 'proteinas', 'gorduras', 'quantidade', 'medida')
+
+
 custom_admin_site = CustomAdminSite()
 
-custom_admin_site.register(Alimento)
+custom_admin_site.register(Alimento, AlimentoAdmin)
 custom_admin_site.register(Medida)
 custom_admin_site.register(TipoRefeicao)
 custom_admin_site.register(Refeicao, RefeicaoAdmin)
